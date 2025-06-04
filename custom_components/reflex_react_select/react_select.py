@@ -60,12 +60,15 @@ class ReactSelect(NoSSRComponent):
     is_clearable: rx.Var[bool] = True
     is_multi: rx.Var[bool] = False
 
+    default_value: rx.Var[dict[str, str] | None] = None
+    default_input_value: rx.Var[str | None] = None
     placeholder: rx.Var[str] = ""
     no_options_message: rx.vars.FunctionVar[Any] | None = None
 
     menu_is_open: rx.Var[bool | None] = None
     default_menu_is_open: rx.Var[bool] = False
     close_menu_on_select: rx.Var[bool] = True
+    max_menu_height: rx.Var[int | None] = None
 
     on_input_change: rx.EventHandler[lambda entered_text: [entered_text]]
     on_change: rx.EventHandler[lambda option: [option]]

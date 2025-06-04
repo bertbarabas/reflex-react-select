@@ -83,7 +83,7 @@ def index() -> rx.Component:
     )
 
 
-@rx.memo  # comment memo out to get styles to work for dark mode
+@rx.memo
 def form_with_selections() -> rx.Component:
     return rx.form.root(
         rx.vstack(
@@ -107,7 +107,9 @@ def form_with_selections() -> rx.Component:
                             `No street addresses start with: ${select_object.inputValue}`;}"""
                     ),
                     width="20em",
-                    on_mount=rx.set_focus("selected_street_id"),    # never finds the id although you can see it is there on the element
+                    on_mount=rx.set_focus(
+                        "selected_street_id"
+                    ),  # never finds the id although you can see it is there on the element
                 ),
                 key="selected_street_key",
             ),
@@ -130,6 +132,24 @@ def form_with_selections() -> rx.Component:
                     width="20em",
                 ),
                 key="desired_foods_key",
+            ),
+            rx.form.field(
+                rx.form.label(
+                    "Most desired food",
+                    size="4",
+                    weight="medium",
+                ),
+                react_select(
+                    id="most_desired_food_id",
+                    name="most_desired_food",
+                    placeholder="Select most desired food ",
+                    options=food_options,
+                    max_menu_height=100,
+                    is_searchable=False,
+                    is_clearable=False,
+                    width="20em",
+                ),
+                key="most_desired_food_key",
             ),
             align="center",
             direction="column",
