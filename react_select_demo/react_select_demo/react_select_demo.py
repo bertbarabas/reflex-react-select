@@ -1,6 +1,5 @@
 import reflex as rx
 from reflex.style import set_color_mode, color_mode
-
 from reflex_react_select import react_select
 
 with open("react_select_demo/test_data/2_000 Street Addresses.txt", "r") as file:
@@ -39,6 +38,10 @@ class StreetState(rx.State):
         if self.entered_prefix != entered_text[:2]:
             self.entered_prefix = entered_text[:2] if len(entered_text) >= 2 else ""
 
+    @rx.event
+    def set_focus(self, target_id):
+        return rx.call_script(f'document.getElementById("{target_id}").focus();')
+
 
 def dark_mode_toggle() -> rx.Component:
     return rx.segmented_control.root(
@@ -72,7 +75,8 @@ def index() -> rx.Component:
                 direction="column",
             ),
             rx.cond(
-                rx.State.is_hydrated,  # without this rx.memo causes exception
+                # rx.State.is_hydrated,  # without this rx.memo causes exception
+                True,  # The above is always returning false now!
                 form_with_selections(),
             ),
             direction="column",
@@ -94,7 +98,7 @@ def form_with_selections() -> rx.Component:
                     weight="medium",
                 ),
                 react_select(
-                    id="selected_street_id",
+                    input_id="selected_street_id",
                     name="selected_street",
                     placeholder="Select street address",
                     options=StreetState.streets,
@@ -107,9 +111,10 @@ def form_with_selections() -> rx.Component:
                             `No street addresses start with: ${select_object.inputValue}`;}"""
                     ),
                     width="20em",
-                    on_mount=rx.set_focus(
-                        "selected_street_id"
-                    ),  # never finds the id although you can see it is there on the element
+                    on_mount=StreetState.set_focus("selected_street_id"),
+                    # on_mount=rx.set_focus(
+                    #     "selected_street_id"
+                    # ),  # never finds the id although you can see it is there on the element
                 ),
                 key="selected_street_key",
             ),
@@ -120,7 +125,7 @@ def form_with_selections() -> rx.Component:
                     weight="medium",
                 ),
                 react_select(
-                    id="desired_foods_id",
+                    input_id="desired_foods_id",
                     name="desired_foods",
                     placeholder="Select foods desired ",
                     is_multi=True,
@@ -140,7 +145,7 @@ def form_with_selections() -> rx.Component:
                     weight="medium",
                 ),
                 react_select(
-                    id="most_desired_food_id",
+                    input_id="most_desired_food_id",
                     name="most_desired_food",
                     placeholder="Select most desired food ",
                     options=food_options,
@@ -150,6 +155,10 @@ def form_with_selections() -> rx.Component:
                     width="20em",
                 ),
                 key="most_desired_food_key",
+            ),
+            rx.button(
+                "Select Desired Foods",
+                on_click=StreetState.set_focus("desired_foods_id"),
             ),
             align="center",
             direction="column",

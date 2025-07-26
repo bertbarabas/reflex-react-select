@@ -50,7 +50,7 @@ class ReactSelect(NoSSRComponent):
     class_name_prefix: rx.Var[str] = "react-select"
 
     name: rx.Var[str]
-    id: rx.Var[str]
+    input_id: rx.Var[str]
 
     options: rx.Var[list[dict[str, str]]]
     value: rx.Var[str]
